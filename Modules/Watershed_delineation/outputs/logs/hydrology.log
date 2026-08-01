@@ -1,0 +1,69 @@
+2026-06-27 16:14:57 | INFO     | run_hydrology_workflow | ============================================================
+2026-06-27 16:14:57 | INFO     | run_hydrology_workflow | HYDROLOGY WORKFLOW START | mode=main | DEM=SRTM_DEM.tif
+2026-06-27 16:14:57 | INFO     | run_hydrology_workflow | ============================================================
+2026-06-27 16:14:57 | INFO     | read_dem | DEM read: SRTM_DEM.tif | shape=(1188, 1620) | dtype=float32 | valid_pixels=1924560
+2026-06-27 16:14:57 | INFO     | validate_dem | DEM validated: valid=100.0% | CRS=EPSG:4326
+2026-06-27 16:14:57 | INFO     | read_metadata | Metadata: 1620x1188 | res=(0.0003,0.0003) | CRS=EPSG:4326 | projected=False
+2026-06-27 16:14:57 | INFO     | read_metadata | Metadata: 1620x1188 | res=(0.0003,0.0003) | CRS=EPSG:4326 | projected=False
+2026-06-27 16:14:57 | INFO     | determine_projected_crs | Derived UTM CRS: zone=45N | EPSG=32645
+2026-06-27 16:14:57 | INFO     | reproject_raster | Reprojected: SRTM_DEM.tif → dem_projected.tif | CRS=+proj=utm +zone=45 +datum=WGS84 +units=m +type=crs
+2026-06-27 16:14:57 | INFO     | run_hydrology_workflow | DEM reprojected to: +proj=utm +zone=45 +datum=WGS84 +units=m +type=crs
+2026-06-27 16:14:57 | INFO     | init_whitebox | WhiteboxTools initialised: WhiteboxTools v2.4.0 (c) Dr. John Lindsay 2017-2023
+2026-06-27 16:14:57 | INFO     | preprocess_dem | === DEM Preprocessing (BREACH method) ===
+2026-06-27 16:14:59 | WARNING  | _wbt_call | WBT has no function 'resolve_flats' — skipping.
+2026-06-27 16:14:59 | WARNING  | _wbt_call | WBT has no function 'resolve_flats' — skipping.
+2026-06-27 16:14:59 | WARNING  | _wbt_call | WBT has no function 'fix_flats' — skipping.
+2026-06-27 16:14:59 | WARNING  | preprocess_dem | resolve_flats unavailable — using dem_breached.tif as conditioned DEM.
+2026-06-27 16:14:59 | INFO     | preprocess_dem | Preprocessing complete. Conditioned DEM: dem_conditioned.tif
+2026-06-27 16:14:59 | INFO     | run_terrain_analysis | === Terrain Analysis ===
+2026-06-27 16:14:59 | INFO     | compute_slope | Slope computed (degrees): slope.tif
+2026-06-27 16:15:00 | INFO     | compute_aspect | Aspect computed: aspect.tif
+2026-06-27 16:15:00 | INFO     | compute_hillshade | Hillshade computed (az=315, alt=45): hillshade.tif
+2026-06-27 16:15:01 | INFO     | compute_curvature | Profile curvature computed: curvature_profile.tif
+2026-06-27 16:15:02 | INFO     | compute_tri | TRI computed (ruggedness_index): tri.tif
+2026-06-27 16:15:02 | WARNING  | run_terrain_analysis | TPI computation skipped: No working TPI function found in this WBT version.
+2026-06-27 16:15:02 | INFO     | run_terrain_analysis | Terrain analysis complete: 5 products
+2026-06-27 16:15:02 | INFO     | run_flow_analysis | === Flow Analysis ===
+2026-06-27 16:15:02 | INFO     | compute_flow_direction | D8 flow direction computed: flow_direction.tif
+2026-06-27 16:15:04 | INFO     | compute_flow_accumulation | Log10 flow accumulation saved: flow_accumulation_log.tif
+2026-06-27 16:15:04 | INFO     | compute_flow_accumulation | Flow accumulation computed: flow_accumulation.tif
+2026-06-27 16:15:04 | INFO     | compute_flow_length | Flow length (downstream) computed: flow_length.tif
+2026-06-27 16:15:04 | INFO     | run_flow_analysis | Flow analysis complete.
+2026-06-27 16:15:05 | INFO     | estimate_stream_threshold | Auto stream threshold: 3797 cells (p99.0 of 1980525 values)
+2026-06-27 16:15:05 | INFO     | extract_stream_raster | Stream raster extracted (threshold=3797): streams.tif
+2026-06-27 16:15:05 | INFO     | extract_stream_vector | Stream vector exported: streams.shp
+2026-06-27 16:15:06 | INFO     | generate_stream_links | Stream links generated: stream_links.tif
+2026-06-27 16:15:06 | INFO     | compute_strahler_order | Strahler order raster computed: strahler_order.tif
+2026-06-27 16:15:06 | INFO     | build_ordered_stream_geodataframe | Ordered stream GDF: 277 segments | max_order=4
+2026-06-27 16:15:06 | INFO     | save_vector | Vector saved: streams_ordered.shp | rows=277 | driver=ESRI Shapefile
+2026-06-27 16:15:06 | INFO     | reproject_outlet | Outlet reprojected: (85.293569, 27.658033) → (331678.42, 3060485.63)
+2026-06-27 16:15:06 | INFO     | validate_outlet_within_dem | Outlet validated within DEM extent.
+2026-06-27 16:15:06 | INFO     | snap_outlet_to_stream | Outlet snapped: (331678.42, 3060485.63) → (330651.93, 3058759.94) [60 cell window]
+2026-06-27 16:15:06 | INFO     | create_outlet_shapefile | Outlet shapefile saved: outlets_snapped.shp (1 points)
+2026-06-27 16:15:07 | INFO     | delineate_watershed | Watershed raster delineated: watershed.tif
+2026-06-27 16:15:07 | INFO     | watershed_raster_to_polygon | Watershed raster unique values: [-32768      1] | nodata=-32768.0
+2026-06-27 16:15:07 | INFO     | watershed_raster_to_polygon | Auto-detected basin value: 1
+2026-06-27 16:15:07 | INFO     | raster_to_polygon | Raster→polygon: 1 features | watershed.shp
+2026-06-27 16:15:07 | INFO     | compute_morphometrics | === Morphometric Analysis ===
+2026-06-27 16:15:07 | INFO     | compute_morphometrics | Morphometrics: area=601.73 km² | Dd=1.111 | order=4 | Rb=2.02
+2026-06-27 16:15:07 | INFO     | watershed_raster_to_polygon | Morphometrics embedded in watershed shapefile attribute table.
+2026-06-27 16:15:07 | INFO     | watershed_raster_to_polygon | Watershed polygon: area=601.73 km²
+2026-06-27 16:15:08 | INFO     | export_to_geopackage | GeoPackage exported: hydrology_outputs.gpkg (2 layers)
+2026-06-27 16:15:08 | INFO     | export_to_geojson | GeoJSON exported: watershed.geojson
+2026-06-27 16:15:08 | INFO     | export_to_geojson | GeoJSON exported: streams.geojson
+2026-06-27 16:15:08 | INFO     | run_visualization | === Visualization ===
+2026-06-27 16:15:12 | INFO     | plot_dem | DEM figure saved: dem.png
+2026-06-27 16:15:14 | INFO     | plot_slope | Slope figure saved: slope.png
+2026-06-27 16:15:17 | INFO     | plot_aspect | Aspect figure saved: aspect.png
+2026-06-27 16:15:19 | INFO     | plot_flow_accumulation | Flow accumulation figure saved: flow_accumulation.png
+2026-06-27 16:15:28 | INFO     | plot_watershed | Watershed figure saved: watershed.png
+2026-06-27 16:15:33 | INFO     | plot_ordered_streams | Ordered streams figure saved: ordered_streams.png
+2026-06-27 16:15:45 | INFO     | plot_combined_summary | Combined summary figure saved: summary.png
+2026-06-27 16:15:45 | INFO     | run_visualization | Visualization complete: 7 figures
+2026-06-27 16:15:45 | INFO     | run_hydrology_workflow | ============================================================
+2026-06-27 16:15:45 | INFO     | run_hydrology_workflow | HYDROLOGY WORKFLOW COMPLETE
+2026-06-27 16:15:45 | INFO     | run_hydrology_workflow |   Watershed area : 601.73 km²
+2026-06-27 16:15:45 | INFO     | run_hydrology_workflow |   Max order      : 0
+2026-06-27 16:15:45 | INFO     | run_hydrology_workflow |   Stream count   : 0
+2026-06-27 16:15:45 | INFO     | run_hydrology_workflow |   Outputs        : F:\Hydrological_application\outputs
+2026-06-27 16:15:45 | INFO     | run_hydrology_workflow | ============================================================

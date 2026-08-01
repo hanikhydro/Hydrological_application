@@ -1,0 +1,7 @@
+geopandas
+pandas
+numpy
+matplotlib
+plotly
+rasterio
+xarray
