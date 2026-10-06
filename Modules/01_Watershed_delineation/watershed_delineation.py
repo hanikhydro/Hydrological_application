@@ -4,23 +4,39 @@ Created on Sat Jun 27 11:30:38 2026
 
 @author: acer
 """
-import importlib
-import hydrology_tool
-importlib.reload(hydrology_tool)
+import sys
+from pathlib import Path
+
+# ─────────────────────────────────────────────────────────────
+# Path Configuration (Makes script portable across computers)
+# ─────────────────────────────────────────────────────────────
+SCRIPT_DIR = Path(__file__).parent
+PROJECT_ROOT = SCRIPT_DIR.parent.parent
+OUTPUTS_DIR = PROJECT_ROOT / "outputs"
+DEM_DIR = OUTPUTS_DIR / "dem"
+
+# Add script directory to path so local modules can be imported
+if str(SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPT_DIR))
+
+# Create output directories if they don't exist
+DEM_DIR.mkdir(parents=True, exist_ok=True)
+
+# Import local modules
 from hydrology_tool import run_hydrology_workflow
 from dem_downloader import build_config, download_dem
 
-# ------------------------------------------------------------
+# ─────────────────────────────────────────────────────────────
 # DEM_Download
-# ------------------------------------------------------------
+# ─────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
 
     cfg = build_config(
-        west = 85.15, south = 27.5,east= 85.6, north = 27.83,
+        west = 85.15, south = 27.5, east = 85.6, north = 27.83,
         dem_source="SRTM",      # SRTM | NASADEM | FABDEM | MERIT | ALOS | COPERNICUS
         opentopo_key="3e9fdba0886e5b6926b25485e8f111a4",
-        work_dir="F:/Hydrological_application/outputs/dem",
+        work_dir=str(DEM_DIR),
     )
 
     dem = download_dem(cfg)
@@ -62,7 +78,7 @@ results = run_hydrology_workflow(
     # ------------------------------------------------------------------ #
 
     # Path to your input DEM (GeoTIFF or any GDAL-supported format)
-    dem_path="F:/Hydrological_application/outputs/dem/SRTM_DEM.tif",
+    dem_path=str(DEM_DIR / "SRTM_DEM.tif"),
 
     # Outlet coordinate(s) in WGS84 (lon, lat) order
     # Single outlet:
@@ -88,7 +104,7 @@ results = run_hydrology_workflow(
     # Creates subfolders: terrain/ hydrology/ watershed/ streams/
     #                     subwatersheds_auto/ subwatersheds_points/
     #                     statistics/ figures/ logs/ preprocessed/
-    output_dir="F:/Hydrological_application/outputs",
+    output_dir=str(OUTPUTS_DIR),
     
     # ── MODE ──────────────────────────────────────────────────────────────
     # "main"   → main watershed only
@@ -121,4 +137,3 @@ results = run_hydrology_workflow(
     # ── DEBUGGING ─────────────────────────────────────────────────────────
     verbose=False,                       # True = WhiteboxTools prints progress to stdout
 )
-    

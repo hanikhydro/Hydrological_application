@@ -2320,7 +2320,7 @@ def run_hydrology_workflow(
     # ------------------------------------------------------------------ #
     # 2. WhiteboxTools                                                     #
     # ------------------------------------------------------------------ #
-    wbt = init_whitebox(verbose=verbose)
+    wbt = init_whitebox(verbose=verbose, working_dir=dirs["preprocessed"])
 
     # ------------------------------------------------------------------ #
     # 3. Preprocessing                                                     #
